@@ -1,5 +1,5 @@
 from socket import socket, AF_INET, SOCK_STREAM
-from constants import PORT
+from constants import PORT, SERVER_BACKLOG, MAX_BUFSIZE
 
 # Create TCP/IP socket
 server_socket: socket = socket(AF_INET, SOCK_STREAM)
@@ -7,22 +7,18 @@ server_socket: socket = socket(AF_INET, SOCK_STREAM)
 server_address: tuple[str, int] = ("localhost", PORT)
 server_socket.bind(server_address)
 
-server_socket.listen(5)
+server_socket.listen(SERVER_BACKLOG)
 print("Server is listening...")
 
 while True:
-    # Wait for a connection
     client_socket, client_address = server_socket.accept()
     print(f"Connection from {client_address}")
 
-    # Receive data from the client
-    data = client_socket.recv(1024)
+    data: bytes = client_socket.recv(MAX_BUFSIZE)
     if data:
-        print(f"Received: {data.decode()}")
+        print(f"Received from client: {data.decode()}")
 
-        # Send a response back to the client
-        response = "Message received"
+        response: str = f"Message received: {data.decode()}"
         client_socket.sendall(response.encode())
 
-    # Close the connection
     client_socket.close()

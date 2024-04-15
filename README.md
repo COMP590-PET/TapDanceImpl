@@ -1,9 +1,13 @@
 # README
 
+## Install
+
+Install `mitmproxy` with pip and tmux.
+
 ## Usage
 
-Open up two terminal windows using tmux.
+Open two tmux panes.
 
-In window 0, run `python server.py`. This server will stay active until you end the process.
+In one, run `mitmdump -s ./censor.py`.
 
-In window 1, run `python client.py`. This client will send one message and then ends.
+In the other, run `curl --proxy http://127.0.0.1:8080 "https://www.google.com"` (will be blocked). Getting any other URL will work fine.

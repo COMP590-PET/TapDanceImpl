@@ -12,4 +12,4 @@ Open two tmux panes.
 
 In one, run `mitmdump -s ./censor.py`.
 
-In the other, run `curl --proxy http://127.0.0.1:8080 "https://www.google.com"`, which will be blocked since it's in `urls.txt`. Getting any other URL will work fine.
+In the other, run `curl --proxy http://127.0.0.1:8080 "http://www.google.com"`, which will be blocked since it's in `urls.txt`. Getting any other URL will work fine.

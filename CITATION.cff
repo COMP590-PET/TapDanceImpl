@@ -1,0 +1,40 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: TapDanceImpl
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Jesse
+    family-names: Wei
+    email: jesse@cs.unc.edu
+    affiliation: The University of North Carolina at Chapel Hill
+  - given-names: Daniel
+    family-names: Xie
+    email: dxie@unc.edu
+    affiliation: The University of North Carolina at Chapel Hill
+  - given-names: Harin
+    family-names: Lim
+    email: hlim@unc.edu
+    affiliation: The University of North Carolina at Chapel Hill
+  - given-names: Dohhyun
+    email: dkim3@unc.edu
+    affiliation: The University of North Carolina at Chapel Hill
+    family-names: Kim
+  - given-names: Matseoi
+    family-names: Zau
+    email: matseoi@ad.unc.edu
+    affiliation: The University of North Carolina at Chapel Hill
+repository-code: 'https://github.com/COMP590-PET/TapDanceImpl'
+repository-artifact: 'https://github.com/COMP590-PET/TapDanceImpl'
+abstract: >-
+  An implementation of the TapDance protocol for refraction
+  networking
+keywords:
+  - TapDance
+  - refraction networking
+  - cryptography
+license: MIT

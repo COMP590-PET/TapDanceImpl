@@ -4,3 +4,5 @@ include
 lib
 lib64
 pyvenv.cfg
+mitmproxy-ca-cert.pem
+*.log

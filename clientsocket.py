@@ -71,5 +71,5 @@ def print_ssl_keys():
 
 # Example usage
 if __name__ == "__main__":
-    tls_handshake_through_proxy("www.reddit.com", "localhost", 8080, 443)
+    tls_handshake_through_proxy("www.google.com", "localhost", 8080, 443)
     print_ssl_keys()

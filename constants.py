@@ -12,3 +12,5 @@ PROXIES: dict[str, str] = {
     "https": "https://127.0.0.1:8080",
 }
 MITMPROXY_CERT: Path = Path("resources") / "mitmproxy-ca-cert.pem"
+
+HTTPS_PORT: int = 443

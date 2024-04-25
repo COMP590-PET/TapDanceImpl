@@ -22,7 +22,10 @@ def test_censor():
         response = requests.get(url, proxies=PROXIES, verify=str(MITMPROXY_CERT))
         assert response.status_code == 404
 
+
 @censor
 def test_noncensored():
-    response = requests.get("https://www.jessewei.dev", proxies=PROXIES, verify=str(MITMPROXY_CERT))
+    response = requests.get(
+        "https://www.jessewei.dev", proxies=PROXIES, verify=str(MITMPROXY_CERT)
+    )
     assert response.status_code == 200

@@ -1,13 +1,7 @@
 # Usage: After running censor.py (following the usage instructions there), run python -m client
 
 import requests
-from pathlib import Path
-
-PROXIES: dict[str, str] = {
-    "http": "http://127.0.0.1:8080",
-    "https": "https://127.0.0.1:8080",
-}
-MITMPROXY_CERT: Path = Path("resources") / "mitmproxy-ca-cert.pem"
+from constants import PROXIES, MITMPROXY_CERT
 
 
 def main() -> None:

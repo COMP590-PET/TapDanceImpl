@@ -10,9 +10,11 @@ You should also install tmux to see multiple terminal windows in the same termin
 
 Follow the usage instructions in [censor.py](censor.py) and [client.py](client.py).
 
-You may also use `curl,` such as `curl --proxy http://127.0.0.1:8080 "http://www.google.com`.
+You may also use `curl,` such as `curl --proxy http://127.0.0.1:8080 "http://www.google.com"`.
 
 ### Resources folder
+
+There are some files in [resources/](resources) that you may have to generate yourself.
 
 #### mitmproxy-ca-cert.pem
 
@@ -22,3 +24,7 @@ You may also use `curl,` such as `curl --proxy http://127.0.0.1:8080 "http://www
 4. Generate a certificate for your OS
 5. Save the file to [resources/](resources) with the same name to enable our code to work
 6. To use in Google Chrome, you will have to double click the certificate and trust it (the steps depend on your OS)
+
+## Testing
+
+`python -m pytest tests`

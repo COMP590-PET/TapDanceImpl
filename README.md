@@ -8,8 +8,17 @@ You should also install tmux to see multiple terminal windows in the same termin
 
 ## Usage
 
-Open two tmux panes.
+Follow the usage instructions in [censor.py](censor.py) and [client.py](client.py).
 
-In one, run `mitmdump -s ./censor.py`.
+You may also use `curl,` such as `curl --proxy http://127.0.0.1:8080 "http://www.google.com`.
 
-In the other, run `curl --proxy http://127.0.0.1:8080 "http://www.google.com"`, which will be blocked since it's in `urls.txt`. Getting any other URL will work fine.
+### Resources folder
+
+#### mitmproxy-ca-cert.pem
+
+1. Run `mitmproxy`
+2. Go to your computer's proxy settings (e.g., in [chrome://settings/system](chrome://settings/system)) and enable HTTP and HTTPS proxy servers on `127.0.0.1:8080`
+3. Go to [mitm.it](mitm.it)
+4. Generate a certificate for your OS
+5. Save the file to [resources/](resources) with the same name to enable our code to work
+6. To use in Google Chrome, you will have to double click the certificate and trust it (the steps depend on your OS)

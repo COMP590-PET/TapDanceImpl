@@ -22,13 +22,14 @@ def KeyGen(stationPK, clientSK, masterK):       ##The client uses the TapDance s
 def TagGen(Key CurveKey, Key Masterkey):        ##Elligator 2 the master secret and generate
     
     tweak = os.urandom(1)
-    cypher.crypto_elligator_rev(SSkey, , tweak)
+    curve = cypher.crypto_elligator_rev(SSkey, , tweak)
     return tag
 
 
 
 def encode(### request, Key Pkey, Tag):       ##attach tag to HTTP request
     self.TagGen()
+
 
 def decode(### request):       ##recover tag from HTTP request 
     

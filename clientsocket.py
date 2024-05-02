@@ -1,6 +1,7 @@
 import os
 import socket
 import ssl
+import webbrowser
 
 # Specify the path for the SSL key log file
 key_log_file = "ssl_key.log"
@@ -53,6 +54,7 @@ def tls_handshake_through_proxy(host, proxy_host, proxy_port, target_port):
     response = wrapped_socket.recv(4096)
     print("HTTP Response Received")
     print(response.decode())
+    webbrowser.open_new_tab(response)
 
     # Close the socket
     wrapped_socket.close()

@@ -1,7 +1,12 @@
 # Usage: After running censor.py (following the usage instructions there), run python -m client
 
+from pathlib import Path
 import requests
-from constants import PROXIES, MITMPROXY_CERT
+from constants import PROXIES, MITMPROXY_CERT, RESOURCES
+import os
+import sslkeylog
+
+sslkeylog.set_keylog(RESOURCES / "sslkeylog.txt")
 
 
 def main() -> None:

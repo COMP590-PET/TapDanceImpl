@@ -15,3 +15,5 @@ MITMPROXY_CERT: Path = Path("resources") / "mitmproxy-ca-cert.pem"
 
 HTTPS_PORT: int = 443
 HTTP_PORT: int = 80
+
+RESOURCES: Path = Path("resources")

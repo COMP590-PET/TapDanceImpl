@@ -10,6 +10,8 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import x25519
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -26,6 +28,7 @@ class BlockResource:
     def __init__(self):
         logging.info(f"{len(CENSOR_BLOCKED_URLS)} censored URL's read")
         logging.info(f"{len(ISP_REFRACT_URLS)} refract URL's read")
+        self.incomplete_detected = False 
         self.private_key = x25519.X25519PrivateKey.generate()
         # Get public key from private key
         self.public_key = self.private_key.public_key()
@@ -49,23 +52,44 @@ class BlockResource:
         logging.info("Public key saved to file.")
 
     def request(self, flow: http.HTTPFlow) -> None:
-        logging.info(f"ACK: Received HTTP request for {flow.request.pretty_url}")
+
+        #logging.info(f"ACK: Received HTTP request for {flow.request.pretty_url}")
+        #request = flow.request
+        #logging.info(request)
+        #logging.warning(request.endswith("\r\n\r\n"))
+        #logging.info("Received HTTP Request:")
+        #logging.info(f"Method: {request.method}")
+        #logging.info(f"URL: {request.pretty_url}")
+        #logging.info(f"Headers: {request.headers}")
+        #if request.content:
+        #    logging.info(f"Body: {request.content}")
         self.censor(flow)
-        if self.check_incomplete_request(flow):
+        #logging.info(f"ACK: Received HTTP request for {flow.request.pretty_url}")
+    
+        #First, check for an incomplete request
+        #if not self.check_incomplete_request(flow):
+        logging.info("Detected incomplete HTTPS request.")
+        if any(re.search(pattern, flow.request.url) for pattern in ISP_REFRACT_URLS):
+            logging.info(f"Redirecting to {flow.request.url} due to prior incomplete request.")
+            flow.request.host = "www.bing.com"
+            self.incomplete_detected = False 
+
+        
+
+        """if self.check_incomplete_request(flow):
             logging.info("Detected incomplete https request")
-            #public_key_client = load_public_key("public_key_client.pem")
-            #shared_secret = self.private_key.exchange(ec.ECDH(), public_key_client)
-            #derived_key = hashes.Hash(hashes.SHA256(), backend=default_backend())
-            #derived_key.update(shared_secret)
-            #final_key = derived_key.finalize()
-
+            public_key_client = load_public_key("public_key_client.pem")
+            shared_secret = self.private_key.exchange(public_key_client)
+            derived_key = HKDF(
+                algorithm=hashes.SHA256(),
+                length=32,
+                salt=None,
+                info=b'handshake data',
+                backend=default_backend()
+            ).derive(shared_secret)
+     
             self.isp_redirect(flow)
-
-    def response(self, flow: http.HTTPFlow) -> None:
-        # Simulate TCP ACK by modifying the response
-        if flow.response:
-            flow.response.headers["x-tcp-simulation"] = "ACK for response"
-            logging.info(f"ACK: Sent HTTP response for {flow.request.pretty_url}")
+        """
 
     def censor(self, flow: http.HTTPFlow) -> None:
         # Check if the URL is in the blocked list and censor it
@@ -76,6 +100,7 @@ class BlockResource:
                 b"This URL has been censored.",  # Response body
                 {"Content-Type": "text/plain"}  # Headers
             )
+        #logging.info(flow.response.content)
 
     def isp_redirect(self, flow: http.HTTPFlow) -> None:
         # Redirect URLs based on ISP-specific rules
@@ -108,30 +133,14 @@ class BlockResource:
             return None
 
     def check_incomplete_request(self, flow: http.HTTPFlow) -> bool:
-        logging.info("testing incompleteness")
-        logging.info("Content-Length" in flow.request.headers)
-        if "Content-Length" in flow.request.headers:
-            content_length = int(flow.request.headers["Content-Length"])
-            actual_length = len(flow.request.content)
-            if actual_length < content_length:
-                logging.warning(f"Incomplete HTTP request detected for {flow.request.url}")
-                
-                # Assuming the encrypted data is the received part of the body
-                encrypted_data = flow.request.content
-                private_key = self.load_private_key('private_key_isp.pem')  # Ensure this path and method are correct
-                decrypted_data = self.decrypt_data(private_key, encrypted_data)
-                
-                if decrypted_data:
-                    logging.info("Decrypted Data: {}".format(decrypted_data))
-                else:
-                    logging.error("Failed to decrypt data.")
-                
-                flow.response = http.Response.make(
-                    400, b"Incomplete HTTP request", {"Content-Type": "text/plain"}
-                )
-                return True
+        logging.info("Checking for header completeness in the request")
+        logging.info(flow.request.content[-4:])
+        if not flow.request.content: return True
+        if flow.request.content[-4:] == b"\r\n\r\n":
+            return True
         return False
-
+    
+        
 addons = [
     BlockResource()
 ]

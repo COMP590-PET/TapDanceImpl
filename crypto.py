@@ -119,7 +119,6 @@ def extract(tag, stationSK):      ##extract secrets from received tag
     return secrets
 
 # Generate the tag and extract the secrets
-
 master_key = b't\t\xa9\xb0\xf2\x1f\xc6\xd3wI<\xfb@|\xee\xba\xdc\n\xac\xad\xc1\x14Ik\xdc\x96\xbd\xbaH\x94!\xfe\xb0\x9a\xeeW\xfb\xa60<\xb5\x80\x96\xdc \xb7lC'
 print(len(master_key))
 client_random = os.urandom(32)

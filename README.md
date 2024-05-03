@@ -25,6 +25,10 @@ There are some files in [resources/](resources) that you may have to generate yo
 5. Save the file to [resources/](resources) with the same name to enable our code to work
 6. To use in Google Chrome, you will have to double click the certificate and trust it (the steps depend on your OS)
 
+## Tag Generation and Reverse Engineering Ciphertext
+
+Run [crypto.py](crypto.py) to demo tag generation. Note: you may have to rerun until a working key pair for Elligator2 is produced.
+
 ## Testing
 
 `python -m pytest tests`

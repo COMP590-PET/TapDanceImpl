@@ -1,5 +1,0 @@
-www.google.com
-cs.unc.edu
-www.amazon.com
-refraction.network
-(our own decoy server?)

@@ -15,6 +15,7 @@ import monocypher as cypher
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PublicKey
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -99,8 +100,8 @@ def decode_pk(hidden):       ## decode hidden public key using Elligator2
     return cypher.elligator_map(hidden)
 
 def extract(tag, stationSK):      ##extract secrets from received tag
-    clientPK = decode_pk(tag[:32])
-    shared_hash = key_gen(stationSK, clientPK)
+    clientPK = X25519PublicKey.from_public_bytes(decode_pk(tag[:32]))
+    shared_hash = key_gen(clientPK, stationSK)
 
     # Decrypt the payload using the derived key
     key = shared_hash[:16]
@@ -121,12 +122,7 @@ def extract(tag, stationSK):      ##extract secrets from received tag
     
     return secrets
 
-
-
-# to use map, syntax is: cypher.elligator_map(encoded_pk), which returns the decoded public key
-
-#shared_key = key_gen(station_pk, client_sk)
-
+# Generate the tag and extract the secrets
 
 master_key = b't\t\xa9\xb0\xf2\x1f\xc6\xd3wI<\xfb@|\xee\xba\xdc\n\xac\xad\xc1\x14Ik\xdc\x96\xbd\xbaH\x94!\xfe\xb0\x9a\xeeW\xfb\xa60<\xb5\x80\x96\xdc \xb7lC'
 print(len(master_key))
@@ -180,6 +176,8 @@ print("Generated Tag from the plaintext using AES-CBC")
 print(encrypt_aes_cbc(key,pt,iv))
 
 
-
+print("Extracted Secrets:")
+secrets = extract(tag, station_sk)
+print(secrets)
 
     

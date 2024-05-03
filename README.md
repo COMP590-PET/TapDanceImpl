@@ -14,7 +14,7 @@ You may also use `curl,` such as `curl --proxy http://127.0.0.1:8080 "http://www
 
 ### Resources folder
 
-There are some files in [resources/](resources) that you may have to generate yourself.
+There are some files in [resources/](resources) that you will have to generate yourself.
 
 #### mitmproxy-ca-cert.pem
 

@@ -17,3 +17,19 @@ print(f"Did handshake with {site} over port {BADSSL_TLS_1_2_PORT} through proxy 
 
 master_key = connection.master_key()
 print(f"TLS handshake master key: {master_key}")
+
+request = f"GET / HTTP/1.1\r\nHost: {site.split(':')[0]}\r\nConnection: close\r\n\r\n"
+connection.sendall(request.encode())
+
+response = b""
+try:
+    while True:
+        data = connection.recv(4096)
+        if not data:
+            break
+        response += data
+except SSL.SysCallError as e:
+    pass
+finally:
+    print(f"Received response: {response.decode()}")
+    proxy_sock.close()

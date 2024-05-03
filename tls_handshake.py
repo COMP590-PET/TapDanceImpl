@@ -1,9 +1,9 @@
 from OpenSSL import SSL, crypto
 from OpenSSL.SSL import Context, TLS_METHOD, TLS_CLIENT_METHOD, TLSv1_2_METHOD, Connection
 from socket import socket, AF_INET, SOCK_STREAM, gethostbyname, create_connection
-from constants import BADSSL_TLS_1_2_PORT
+from constants import BADSSL_TLS_1_2_PORT, BADSSL_SUBDOMAIN_1, BADSSL_SUBDOMAIN_2
 
-site: str = f"tls-v1-2.badssl.com:{BADSSL_TLS_1_2_PORT}"
+site: str = f"{BADSSL_SUBDOMAIN_1}:{BADSSL_TLS_1_2_PORT}"
 
 ctx: Context = Context(TLSv1_2_METHOD)
 

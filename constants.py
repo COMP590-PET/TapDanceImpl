@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 
 CENSOR_BLOCKED_URLS: list[re.Pattern] = list(
-    map(re.compile, [r"bing\.com", r"duckduckgo\.com", r"tls-v1-2\.badssl\.com"])
+    map(re.compile, [r"bing\.com", r"duckduckgo\.com", r"mixed\.badssl\.com"])
 )
 ISP_REFRACT_URLS: list[re.Pattern] = list(map(re.compile, [r"reddit\.com"]))
 """When visiting any of these links, refract to somewhere else"""
@@ -19,3 +19,6 @@ MITMPROXY_CERT_WIN: Path = RESOURCES / "mitmproxy-ca-cert.p12"
 HTTPS_PORT: int = 443
 HTTP_PORT: int = 80
 BADSSL_TLS_1_2_PORT: int = 1012
+
+BADSSL_SUBDOMAIN_1: str = "tls-v1-2.badssl.com"
+BADSSL_SUBDOMAIN_2: str = "mixed.badssl.com"

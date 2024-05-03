@@ -95,12 +95,33 @@ def generate_tag(stationPK, clientSK, clientPK, master_secret, client_random, se
     tag = generate_encoded_pk(clientPK) + generate_payload(stationPK, clientSK, master_secret, client_random, server_random, connection_ID)
     return tag
 
-def decode():### request):       ##recover tag from HTTP request 
-    pass
-    #return tag
+def decode_pk(hidden):       ## decode hidden public key using Elligator2
+    return cypher.elligator_map(hidden)
 
-#def extract(tag):      ##extract key from recovered key
-#    cypher.crypto_elligator_map
+def extract(tag, stationSK):      ##extract secrets from received tag
+    clientPK = decode_pk(tag[:32])
+    shared_hash = key_gen(stationSK, clientPK)
+
+    # Decrypt the payload using the derived key
+    key = shared_hash[:16]
+    iv = shared_hash[16:]
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
+    decryptor = cipher.decryptor()
+    decrypted_payload = decryptor.update(tag[32:]) + decryptor.finalize()
+
+    # Check magic value to ensure decryption was successful and intent to proxy
+    if decrypted_payload[:8] != magic_value:
+        raise Exception("Magic value mismatch")
+    
+    # Extract the master secret from the decrypted payload
+    secrets = { "master_secret": decrypted_payload[8:56], 
+               "client_random": decrypted_payload[56:88], 
+               "server_random": decrypted_payload[88:120], 
+               "connection_ID": decrypted_payload[120:136] }
+    
+    return secrets
+
+
 
 # to use map, syntax is: cypher.elligator_map(encoded_pk), which returns the decoded public key
 

@@ -27,10 +27,6 @@ import os
 from bitstring import BitArray
 
 magic_value = os.urandom(8)
-seed = b'\x1d\xed\x81p\xe7Zdr\xf8\xa79\xa3\xed\xb5\xf9\xcb\xcc.\xd5\x04\xf7Z;\xfc\x81*^C/\x1e8('
-# client_hidden, client_sk = cypher.elligator_key_pair(seed)
-# client_pk = cypher.elligator_map(client_hidden)
-# curve1 = cypher.elligator_map(client_hidden)
 
 client_sk = X25519PrivateKey.generate()
 client_pk = client_sk.public_key()
@@ -163,17 +159,33 @@ def decrypt_aes_cbc(p0, key ,tag):
     return pt, p_temp
 
 
+input_material = master_key + client_random + server_random
+
+# Use HKDF with SHA-256 to derive encryption keys
+hkdf = HKDF(
+    algorithm=hashes.SHA256(),
+    length=32,  # AES-256 key size
+    salt=None,  # Salt is optional and can be set to None
+    info=b'tls key derivation',  # Optional context and application specific information
+    backend=default_backend()
+)
+
+# Derive the encryption key
+encryption_key = hkdf.derive(input_material)
+
+
 print("Generated Tag:")
 print(tag)
 p0 = os.urandom(16)
-pt,iv = decrypt_aes_cbc(p0,key,tag)
+p0 = b'c0c0c0c0c0c0c0c0'
+pt,iv = decrypt_aes_cbc(p0,encryption_key,tag)
 print()
 
 print("Generated Plaintet")
 print(pt)
 print()
 print("Generated Tag from the plaintext using AES-CBC")
-print(encrypt_aes_cbc(key,pt,iv))
+print(encrypt_aes_cbc(encryption_key, pt,iv))
 
 
 print("Extracted Secrets:")

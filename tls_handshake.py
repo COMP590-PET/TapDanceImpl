@@ -15,10 +15,10 @@ connection.set_connect_state()
 connection.do_handshake()
 print(f"Did handshake with {site} through proxy server {proxy_sock.getpeername()}")
 
-master_key = connection.master_key()
+master_key: bytes | None = connection.master_key()
 print(f"TLS handshake master key: {master_key}")
 
-request = f"GET / HTTP/1.1\r\nHost: {site}\r\nConnection: close\r\n\r\n"
+request: str = f"GET / HTTP/1.1\r\nHost: {site}\r\nConnection: close\r\n\r\n"
 connection.sendall(request.encode())
 
 response = b""
@@ -28,7 +28,7 @@ try:
         if not data:
             break
         response += data
-except SSL.SysCallError as e:
+except SSL.SysCallError:
     pass
 finally:
     print(f"Received response: {response.decode()}")

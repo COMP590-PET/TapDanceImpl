@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 
 CENSOR_BLOCKED_URLS: list[re.Pattern] = list(
-    map(re.compile, [r"bing\.com", r"duckduckgo\.com"])
+    map(re.compile, [r"bing\.com", r"duckduckgo\.com", r"tls-v1-2\.badssl\.com"])
 )
 ISP_REFRACT_URLS: list[re.Pattern] = list(map(re.compile, [r"reddit\.com"]))
 """When visiting any of these links, refract to somewhere else"""

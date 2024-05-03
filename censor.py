@@ -25,7 +25,7 @@ class BlockResource:
 
     def isp(self, flow: http.HTTPFlow) -> None:
         if any(re.search(url, flow.request.url) for url in ISP_REFRACT_URLS):
-            logging.info(f"Isp found match for {flow.request.url}")
+            logging.info(f"ISP found match for {flow.request.url}")
             flow.request.host = "www.youtube.com"
 
 

@@ -13,7 +13,7 @@ connection: Connection = Connection(ctx, proxy_sock)
 connection.set_tlsext_host_name(site.encode())
 connection.set_connect_state()
 connection.do_handshake()
-print(f"Did handshake with {site} over port {BADSSL_TLS_1_2_PORT} through proxy server {proxy_sock.getpeername()}")
+print(f"Did handshake with {site} through proxy server {proxy_sock.getpeername()}")
 
 master_key = connection.master_key()
 print(f"TLS handshake master key: {master_key}")
